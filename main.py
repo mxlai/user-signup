@@ -80,6 +80,6 @@ def validate_input():
     if not username_error and not password_error and not confirm_error and not email_error:
         return render_template('welcome.html', title='Welcome!', username=username)
     else:
-        return render_template('signup_form.html', username=username, username_error=username_error, password='', password_error=password_error, confirm='', confirm_error=confirm_error, email=email, email_error=email_error) 
+        return render_template('signup_form.html', title='Signup', username=username, username_error=username_error, password='', password_error=password_error, confirm='', confirm_error=confirm_error, email=email, email_error=email_error) 
 
 app.run()
