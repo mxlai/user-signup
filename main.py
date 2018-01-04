@@ -1,67 +1,13 @@
-from flask import Flask, request
+from flask import Flask, request, redirect, render_template
+import cgi
+import os
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
 
-signup_form = """
-    <style>
-        .error {{ color: red; }}
-    </style>
-    <h1>Signup</h1>
-    <form method="post">
-        <table>
-            <tr>
-                <td>
-                    <label>Username</label>
-                </td>
-                <td>
-                    <input name ="username" type="text" value="{username}" />
-                </td>
-                <td>
-                    <p class="error">{username_error}</p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>Password</label>
-                </td>
-                <td>
-                    <input name="password" type="password" value="{password}" />
-                </td>
-                <td>
-                    <p class="error">{password_error}</p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>Verify Password</label>
-                </td>
-                <td>
-                    <input name="confirm" type="password" value="{confirm}" />
-                </td>
-                <td>
-                    <p class="error">{confirm_error}</p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>Email (optional)</label>
-                </td>
-                <td>
-                    <input name="email" type="text" value="{email}" />
-                </td>
-                <td>
-                    <p class="error">{email_error}</p>
-                </td>
-            </tr>
-        </table>
-        <input type="submit">
-    </form>
-    """
-
 @app.route("/user-signup")
 def display_signup_form():
-    return signup_form.format(username='', username_error='', password='', password_error='', confirm='', confirm_error='', email='', email_error='')
+    return render_template('signup_form.html', title='Signup')
 
 def is_empty(string):
     if len(string) == 0:
@@ -131,9 +77,9 @@ def validate_input():
         email_error = 'Invalid email address: Must be between 3 to 20 characters in length'
         email = ''
 
-    if not username_error and not password_error and not confirm_error:
-        return 'Welcome, ' + username + '!'
+    if not username_error and not password_error and not confirm_error and not email_error:
+        return render_template('welcome.html', title='Welcome!', username=username)
     else:
-        return signup_form.format(username=username, username_error=username_error, password=password, password_error=password_error, confirm=confirm, confirm_error=confirm_error, email=email, email_error=email_error) 
+        return render_template('signup_form.html', username=username, username_error=username_error, password='', password_error=password_error, confirm='', confirm_error=confirm_error, email=email, email_error=email_error) 
 
 app.run()
